@@ -164,7 +164,7 @@ class WalletService {
         //RETURN SUCCESS
         return {
             statusCode: 200,
-            message: 'Wallet Funded Successfully',
+            message: 'Transfer Successful',
             data: {
                 from: sender.account_number,
                 to: makeTransferDto.account_number,
