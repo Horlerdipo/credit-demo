@@ -18,24 +18,27 @@ dotenv.config({
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
-const port = process.env.PORT;
+const port = process.env.APP_ENV === "testing" ? process.env.PORT_TEST : process.env.PORT;
 const routes: Array<AppModule> = [];
 
 app.use(helmet());
 app.use(express.json());
 app.use(cors());
 
-//WINSTON LOGGING CONFIG
-const loggerOptions: expressWinston.LoggerOptions = {
-    transports: [new winston.transports.Console()],
-    format: winston.format.combine(
-        winston.format.json(),
-        winston.format.prettyPrint(),
-        winston.format.colorize({all: true})
-    ),
-};
+if(process.env.APP_ENV !== "testing"){
+    //WINSTON LOGGING CONFIG
+    console.log("I am on test mode");
+    const loggerOptions: expressWinston.LoggerOptions = {
+        transports: [new winston.transports.Console()],
+        format: winston.format.combine(
+            winston.format.json(),
+            winston.format.prettyPrint(),
+            winston.format.colorize({all: true})
+        ),
+    };
+    app.use(expressWinston.logger(loggerOptions));
+}
 
-app.use(expressWinston.logger(loggerOptions));
 
 //ADD EVERY MODULE TO THE ROUTE
 routes.push(new UserModule(app));
@@ -54,3 +57,5 @@ server.listen(port, () => {
     });
     console.log(runningMessage);
 });
+
+export default server;
