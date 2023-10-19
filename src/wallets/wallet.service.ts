@@ -76,7 +76,7 @@ class WalletService {
 
     async makeTransfer(makeTransferDto: MakeTransferDto) {
 
-        //GET AUUTHENTICATED USER INFO
+        //GET AUTHENTICATED USER INFO
         const sender = await KnexModule
             .select('users.id', 'users.pin', 'wallets.account_number', 'wallets.balance', 'wallets.id as wallet_id')
             .from('users')
